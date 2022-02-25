@@ -5,47 +5,68 @@ const pinsHitThird = pinsHit.querySelector(".third")
 const frameScore = document.querySelectorAll("#score > td")
 const buttons = document.querySelectorAll(".buttons > button")
 
-let frame = 1
+let frame = 0
 let ball = 1
 let pins = 10
 let score = 0
-let frame1 = 0
-let frame2 = 0
-let frame3 = 0
-let frame4 = 0
-let frame5 = 0
-let frame6 = 0
-let frame7 = 0
-let frame8 = 0
-let frame9 = 0
-let frame10 = 0
+const scoresArray = []
+const initialValue = 0;
 
-function bowl (num) {
+
+
+function bowl (num) {    
     if (ball === 1) {
         hideButtons(num);
         if (num === 10) {
             strike();
             return;
         }
-        pinsHitFirst[frame-1].textContent = num;
+        pinsHitFirst[frame].textContent = num;
+        scoresArray.push(num);
         score += num;
-        frameScore[frame-1].textContent = score;
+        frameScore[frame].textContent = score;
         ball++;
-    } else if (ball === 2) {
-        pinsHitSecond[frame-1].textContent = num;
+        pins -= num;
+        if ((frame >= 1) && (pinsHitSecond[frame-1].textContent = "X")) {
+            scoresArray[frame-1] += num;
+            score += num;
+            frameScore[frame].textContent = score;
+            frameScore[frame-1].textContent = scoresArray[frame-1]
+            }
+            
+        } else if (ball === 2) {
+        pinsHitSecond[frame].textContent = num;
+        scoresArray[frame] += num;
+        pins -= num;
+        if (pins === 0) {
+            spare();
+            return;
+        }
+        if ((frame >= 1) && (pinsHitSecond[frame-1].textContent = "X")) {
+            scoresArray[frame-1] += num;
+            score += num;
+            frameScore[frame].textContent = score;
+            frameScore[frame-1].textContent = scoresArray[frame-1]
+            }
         score += num;
-        frameScore[frame-1].textContent = score;
+        frameScore[frame].textContent = score;
         nextFrame();
         showButtons();
     }
-    console.log(`frame is ${frame}`)
-    console.log(`ball is ${ball}`)
+    console.log(scoresArray)
 }
 
 function strike() {
-    pinsHitSecond[frame-1].textContent = "X";
+    pinsHitSecond[frame].textContent = "X";
     score += 10;
-    frameScore[frame-1].textContent = score;
+    scoresArray.push(10);
+    nextFrame();
+    showButtons();
+}
+
+function spare() {
+    pinsHitSecond[frame].textContent = "/";
+    frameScore[frame].textContent = score;
     nextFrame();
     showButtons();
 }
@@ -53,6 +74,7 @@ function strike() {
 function nextFrame() {
     frame++;
     ball = 1;
+    pins = 10;
 }
 
 for (let i = 0; i < buttons.length; i++) {
