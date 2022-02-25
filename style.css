@@ -1,0 +1,37 @@
+button {
+    font-size: 1.5rem;
+    margin: 0.2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+table, th, td {
+    border-collapse: collapse;
+  }
+
+table {
+    border: 1px solid black;
+    margin-top: 20px;
+}
+
+th, td {
+    height: 40px;
+}
+
+th {
+    border: 1px solid black;
+    width: 80px;
+    font-size: 1.5rem;
+}
+
+th.frameTen {
+    width: 120px;
+}
+
+td.second, td.third {
+    border: 1px solid black;
+}
+
+tr.score td {
+    border-right: 1px solid black;
+}
