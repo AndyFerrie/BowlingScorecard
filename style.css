@@ -14,14 +14,18 @@ table {
     margin-top: 20px;
 }
 
-th, td {
-    height: 40px;
-}
-
 th {
     border: 1px solid black;
     width: 80px;
+    height: 40px;
     font-size: 1.5rem;
+}
+
+td {
+    font-size: 1.5rem;
+    text-align: center;
+    height: 40px;
+    width: 40px;
 }
 
 th.frameTen {
@@ -32,6 +36,6 @@ td.second, td.third {
     border: 1px solid black;
 }
 
-tr.score td {
+#score td {
     border-right: 1px solid black;
 }
