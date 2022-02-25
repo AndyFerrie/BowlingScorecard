@@ -2,6 +2,8 @@ const pinsHit = document.querySelector("#pinsHit")
 const pinsHitFirst = pinsHit.querySelectorAll(".first")
 const pinsHitSecond = pinsHit.querySelectorAll(".second")
 const pinsHitThird = pinsHit.querySelector(".third")
+const frameScore = document.querySelectorAll("#score > td")
+const buttons = document.querySelectorAll(".buttons > button")
 
 let frame = 1
 let ball = 1
@@ -22,20 +24,29 @@ let spare = false
 
 let frameNum = `frame${frame}`;
 
-function frameNo () {
+function bowl (num) {
     if (ball === 1) {
+        pinsHitFirst[frame-1].textContent = num;
+        score += num;
+        frameScore[frame-1].textContent = score;
         ball++;
     } else if (ball === 2) {
-        frame++;
-        ball--;
+        pinsHitSecond[frame-1].textContent = num;
+        score += num;
+        frameScore[frame-1].textContent = score;
+        nextFrame();
     }
-    console.log(`ball is ${ball}`)
     console.log(`frame is ${frame}`)
+    console.log(`ball is ${ball}`)
 }
 
-zero = document.getElementById("zero");
+function nextFrame() {
+    frame++;
+    ball = 1;
+}
 
-zero.addEventListener("click", function zero() {
-    pinsHitFirst[frame-1].textContent = 0;
-    frameNo()
-})
+for (let i =0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", function () {
+        bowl(i);
+    })
+}
