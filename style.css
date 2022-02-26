@@ -32,7 +32,7 @@ th.frameTen {
     width: 120px;
 }
 
-td.second, td.third {
+td.second, td.third, td.X {
     border: 1px solid black;
 }
 
