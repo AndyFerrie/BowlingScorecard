@@ -12,6 +12,7 @@ let score = 0
 const scoresArray = []
 
 function bowl(num) {
+
     if (frame === 9) {
         finalFrame(num);
         return;
@@ -43,71 +44,81 @@ function bowl(num) {
         updateScore(num);
         ifStrike(num);
         nextFrame();
-        showButtons();
     }
     console.log(scoresArray)
 }
 
 function finalFrame(num) {
+
     if (ball === 1) {
 
         hideButtons(num);
+        pins -= num;
+
         if (num === 10) {
             pinsHitFirst[frame].textContent = "X";
             pushScore(num);
             ifStrike(num);
             ifSpare(num);
             showButtons();
-            ball++
+            ball++;
             return;
         }
+
         pinsHitFirst[frame].textContent = num;
-        pushScore(num)
-        pins -= num;
+        pushScore(num);
         ifStrike(num);
         ifSpare(num);   
         ball++; 
         } 
         
     else if (ball === 2) {
-        if (num === 10) {
-            pinsHitSecond[frame].textContent = "X";
-            updateScore(num);
-            ifStrikeFinal(num);
-            showButtons();
-            ball++
-            return;
-        }
+
+        hideButtons(num);
         pins -= num;
 
-        if (pins === 0) {
-            pinsHitSecond[frame].textContent = "/";
+        if (num === 10) {
+            pinsHitSecond[frame].textContent = "X";
+            showButtons();
             updateScore(num);
             ifStrikeFinal(num);
+            ball++;
+            return;
+        }
+        
+        if (pins === 0) {
+            pinsHitSecond[frame].textContent = "/";
             showButtons();
-            ball++
+            updateScore(num);
+            ifStrikeFinal(num);
+            ball++;
+            return;
+        }
+
+        if ((pinsHitFirst[frame].textContent != "X") || (pinsHitFirst[frame].textContent != "/")) {
+            pinsHitSecond[frame].textContent = num;
+            updateScore(num);
+            ifStrikeFinal(num);
+            gameOver();
             return;
         }
 
         pinsHitSecond[frame].textContent = num;
         updateScore(num);
         ifStrikeFinal(num);
-        gameOver();
-        return;
     }
 
     else if (ball === 3) {
+        pinsHitThird.textContent = num;
         if (num === 10) {
             pinsHitThird.textContent = "X";
-            updateScore(num);
-            gameOver();
-            return;
         }
-
-        pinsHitThird.textContent = num;
+        pins -= num;
+        if (pins === 0) {
+            pinsHitThird.textContent = "/";
+        }
         updateScore(num);
         gameOver();
-        return;
     }
     console.log(scoresArray)
 }
@@ -124,14 +135,12 @@ function updateScore(num) {
     frameScore[frame].textContent = score;
 }
 
-
 function strike(num) {
     pinsHitSecond[frame].textContent = "X";
     pushScore(num);
     ifStrike(num);
     ifSpare(num);
     nextFrame();
-    showButtons();
     console.log(scoresArray);
 }
 
@@ -140,17 +149,20 @@ function spare(num) {
     updateScore(num);
     ifStrike(num);
     nextFrame();
-    showButtons();
     console.log(scoresArray);
+}
+
+function updatePrevFrame(num) {
+    scoresArray[frame-1] += num;
+    score += num;
+    frameScore[frame].textContent = score;
+    let currentFrame = scoresArray[frame];
+    frameScore[frame-1].textContent = score - currentFrame;
 }
 
 function ifStrike(num) {
     if ((frame >=1) && (pinsHitSecond[frame-1].textContent === "X")) {
-        scoresArray[frame-1] += num;
-        score += num;
-        frameScore[frame].textContent = score;
-        let currentFrame = scoresArray[frame];
-        frameScore[frame-1].textContent = score - currentFrame;
+        updatePrevFrame(num);
     }
     if ((frame >=2) && (pinsHitSecond[frame-1].textContent === "X") && (pinsHitSecond[frame-2].textContent === "X") && (ball === 1)) {
         scoresArray[frame-2] += num;
@@ -165,21 +177,13 @@ function ifStrike(num) {
 
 function ifStrikeFinal(num) {
     if (pinsHitSecond[frame-1].textContent === "X") {
-        scoresArray[frame-1] += num;
-        score += num;
-        frameScore[frame].textContent = score;
-        let currentFrame = scoresArray[frame];
-        frameScore[frame-1].textContent = score - currentFrame;
+        updatePrevFrame(num);
     }
 }
 
 function ifSpare(num) {
     if ((frame >=1) && (pinsHitSecond[frame-1].textContent === "/")) {
-        scoresArray[frame-1] += num;
-        score += num;
-        frameScore[frame].textContent = score;
-        let currentFrame = scoresArray[frame];
-        frameScore[frame-1].textContent = score - currentFrame;
+        updatePrevFrame(num);
     }
 }
 
@@ -187,6 +191,7 @@ function nextFrame() {
     frame++;
     ball = 1;
     pins = 10;
+    showButtons();
 }
 
 function gameOver() {
