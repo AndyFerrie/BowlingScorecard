@@ -21,13 +21,11 @@ function bowl(num) {
 
         hideButtons(num);
         if (num === 10) {
-            strike();
+            strike(num);
             return;
         }
         pinsHitFirst[frame].textContent = num;
-        scoresArray.push(num);
-        score += num;
-        frameScore[frame].textContent = score;
+        pushScore(num);
         pins -= num;
         ifStrike(num);
         ifSpare(num);   
@@ -36,20 +34,17 @@ function bowl(num) {
         
     else if (ball === 2) {
 
-        pinsHitSecond[frame].textContent = num;
-        scoresArray[frame] += num;
         pins -= num;
         if (pins === 0) {
             spare(num);
             return;
         }
-        score += num;
-        frameScore[frame].textContent = score;
+        pinsHitSecond[frame].textContent = num;
+        updateScore(num);
         ifStrike(num);
         nextFrame();
         showButtons();
     }
-    console.log(ball)
     console.log(scoresArray)
 }
 
@@ -59,19 +54,15 @@ function finalFrame(num) {
         hideButtons(num);
         if (num === 10) {
             pinsHitFirst[frame].textContent = "X";
-            score += 10;
-            scoresArray.push(10);
-            ifStrike(10);
-            ifSpare(10);
+            pushScore(num);
+            ifStrike(num);
+            ifSpare(num);
             showButtons();
-            frameScore[frame].textContent = score;
             ball++
             return;
         }
         pinsHitFirst[frame].textContent = num;
-        scoresArray.push(num);
-        score += num;
-        frameScore[frame].textContent = score;
+        pushScore(num)
         pins -= num;
         ifStrike(num);
         ifSpare(num);   
@@ -81,9 +72,7 @@ function finalFrame(num) {
     else if (ball === 2) {
         if (num === 10) {
             pinsHitSecond[frame].textContent = "X";
-            score += 10;
-            scoresArray[frame] += 10;
-            frameScore[frame].textContent = score;
+            updateScore(num);
             ifStrikeFinal(num);
             showButtons();
             ball++
@@ -93,9 +82,7 @@ function finalFrame(num) {
 
         if (pins === 0) {
             pinsHitSecond[frame].textContent = "/";
-            score += num;
-            scoresArray[frame] += num;
-            frameScore[frame].textContent = score;
+            updateScore(num);
             ifStrikeFinal(num);
             showButtons();
             ball++
@@ -103,9 +90,7 @@ function finalFrame(num) {
         }
 
         pinsHitSecond[frame].textContent = num;
-        score += num;
-        scoresArray[frame] += num;
-        frameScore[frame].textContent = score;
+        updateScore(num);
         ifStrikeFinal(num);
         gameOver();
         return;
@@ -114,43 +99,49 @@ function finalFrame(num) {
     else if (ball === 3) {
         if (num === 10) {
             pinsHitThird.textContent = "X";
-            score += 10;
-            scoresArray[frame] += 10;
-            frameScore[frame].textContent = score;
+            updateScore(num);
             gameOver();
             return;
         }
 
         pinsHitThird.textContent = num;
-        score += num;
-        scoresArray[frame] += num;
-        frameScore[frame].textContent = score;
+        updateScore(num);
         gameOver();
         return;
     }
     console.log(scoresArray)
 }
 
-
-function strike() {
-    pinsHitSecond[frame].textContent = "X";
-    score += 10;
-    scoresArray.push(10);
-    ifStrike(10);
-    ifSpare(10);
+function pushScore(num) {
+    score += num;
+    scoresArray.push(num);
     frameScore[frame].textContent = score;
+}
+
+function updateScore(num) {
+    score += num;
+    scoresArray[frame] += num;
+    frameScore[frame].textContent = score;
+}
+
+
+function strike(num) {
+    pinsHitSecond[frame].textContent = "X";
+    pushScore(num);
+    ifStrike(num);
+    ifSpare(num);
     nextFrame();
     showButtons();
-    console.log(ball)
+    console.log(scoresArray);
 }
 
 function spare(num) {
     pinsHitSecond[frame].textContent = "/";
-    score += num;
-    frameScore[frame].textContent = score;
+    updateScore(num);
     ifStrike(num);
     nextFrame();
     showButtons();
+    console.log(scoresArray);
 }
 
 function ifStrike(num) {
