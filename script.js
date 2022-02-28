@@ -6,13 +6,6 @@ const pinsHitThird = pinsHit.querySelector(".third")
 const frameScore = document.querySelectorAll("#score > td")
 const buttons = document.querySelectorAll(".buttons > button")
 
-// Event listener which loops through the buttons numbered 0-10 representing the number of pins knocked down
-for (let i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener("click", function () {
-        bowl(i);
-    })
-}
-
 // When pins are knocked down this function hides the buttons which are no longer needed
 function hideButtons (num) {
     for (let i = (11 - num); i < buttons.length; i++) {
@@ -216,7 +209,7 @@ function finalFrame(num) {
             return;
         }
 
-        if ((pinsHitFirst[frame].textContent != "X") || (pinsHitFirst[frame].textContent != "/")) {
+        if ((pinsHitFirst[frame].textContent !== "X") || (pinsHitFirst[frame].textContent !== "/")) {
             pinsHitSecond[frame].textContent = num;
             updateScore(num);
             ifStrikeFinal(num);
@@ -247,4 +240,11 @@ function finalFrame(num) {
         gameOver();
     }
     console.log(scoresArray)
+}
+
+// Event listener which loops through the buttons numbered 0-10 representing the number of pins knocked down
+for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", function () {
+        bowl(i);
+    })
 }
