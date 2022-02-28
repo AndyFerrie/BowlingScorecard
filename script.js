@@ -1,4 +1,4 @@
-// These query selectors correlate to the different table cells where scores are displayed
+// Query selectors correlating to the different table cells where scores are displayed
 const pinsHit = document.querySelector("#pinsHit")
 const pinsHitFirst = pinsHit.querySelectorAll(".first")
 const pinsHitSecond = pinsHit.querySelectorAll(".second")
@@ -33,31 +33,35 @@ let frame = 0
 let ball = 1
 // At the beginning of each frame we start with 10 pins
 let pins = 10
-// This variable keeps a cumulative score
+// Keeps a cumulative score
 let score = 0
-// This is an empty array where we push and update the scores for each frame
+// Empty array where we push and update the scores for each frame
 const scoresArray = []
 
+// Updates the cumulative score, pushes it to the array & displays it in the appropraite field
 function pushScore(num) {
     score += num;
     scoresArray.push(num);
     frameScore[frame].textContent = score;
 }
 
+// Updates the cumulative score, updates the pre-existing array value & displays it in the appropraite field
 function updateScore(num) {
     score += num;
     scoresArray[frame] += num;
     frameScore[frame].textContent = score;
 }
 
+// Updates the value of a previous frame (Called following a Strike or Spare)
 function updatePrevFrame(num) {
     scoresArray[frame-1] += num;
     score += num;
     frameScore[frame].textContent = score;
-    let currentFrame = scoresArray[frame];
+    const currentFrame = scoresArray[frame];
     frameScore[frame-1].textContent = score - currentFrame;
 }
 
+// Checks if previous 2 frames were strikes and updates values accordingly
 function ifStrike(num) {
     if ((frame >=1) && (pinsHitSecond[frame-1].textContent === "X")) {
         updatePrevFrame(num);
@@ -66,25 +70,28 @@ function ifStrike(num) {
         scoresArray[frame-2] += num;
         score += num;
         frameScore[frame].textContent = score;
-        let currentFrame = scoresArray[frame];
-        let previousFrame = scoresArray[frame-1];
+        const currentFrame = scoresArray[frame];
+        const previousFrame = scoresArray[frame-1];
         frameScore[frame-1].textContent = score - currentFrame;
         frameScore[frame-2].textContent = score - (currentFrame+previousFrame);
     }
 }
 
+// In the final frame the scoring is such that we only need to check for 1 previous strike
 function ifStrikeFinal(num) {
     if (pinsHitSecond[frame-1].textContent === "X") {
         updatePrevFrame(num);
     }
 }
 
+// Checks if previous frame was a spare and updates value accordingly
 function ifSpare(num) {
     if ((frame >=1) && (pinsHitSecond[frame-1].textContent === "/")) {
         updatePrevFrame(num);
     }
 }
 
+// Begins next frame and resets ball and pins
 function nextFrame() {
     frame++;
     ball = 1;
@@ -92,6 +99,7 @@ function nextFrame() {
     showButtons();
 }
 
+// When all 10 pins are knocked down we add an X to the scorecard, push score, check for previous strikes or spare & then start the next frame
 function strike(num) {
     pinsHitSecond[frame].textContent = "X";
     pushScore(num);
@@ -101,6 +109,7 @@ function strike(num) {
     console.log(scoresArray);
 }
 
+// If all remaining pins are knocked down with 2nd ball we add / to the scorecard, update the score, check for previous strike and start the next frame (we do not need to check for a previous spare as they are never sequential)
 function spare(num) {
     pinsHitSecond[frame].textContent = "/";
     updateScore(num);
@@ -109,14 +118,17 @@ function spare(num) {
     console.log(scoresArray);
 }
 
+// Hides all buttons to indicate that the game is over
 function gameOver() {
     console.log(scoresArray);
     console.log("Game Over");
     hideButtons(11);
 }
 
+// Called whenever we click a numbered button
 function bowl(num) {
 
+    // Checks if final frame as logic is slightly different (see below)
     if (frame === 9) {
         finalFrame(num);
         return;
@@ -156,6 +168,7 @@ function bowl(num) {
     console.log(scoresArray)
 }
 
+// Called when bowling in 10th frame
 function finalFrame(num) {
 
     if (ball === 1) {
