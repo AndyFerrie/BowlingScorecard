@@ -20,7 +20,7 @@ function showButtons () {
     }
 }
 
-// In a game of 10 pin balling there are 10 frames in total
+// In a game of 10 pin bowling there are 10 frames in total
 let frame = 0
 // Each frame has upto 2 balls and the final frame has upto 3
 let ball = 1
